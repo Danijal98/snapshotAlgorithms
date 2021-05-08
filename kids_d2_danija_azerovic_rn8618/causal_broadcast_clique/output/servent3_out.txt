@@ -1,0 +1,49 @@
+21:48:26 - Starting servent [3|localhost|1400]
+21:48:26 - My info: [3|localhost|1400]
+21:48:26 - Neighbors:
+21:48:26 - 1 2 4 
+21:48:26 - Pausing for 10000 ms
+21:48:30 - Got message [1|0|b|CAUSAL_BROADCAST|3]
+21:48:30 - Got b from [1|localhost|1200] broadcast by [1|localhost|1200]
+21:48:30 - Rebroadcasting... 1
+21:48:31 - Sending message [1|0|b|CAUSAL_BROADCAST|1]
+21:48:31 - Got message [2|0|c|CAUSAL_BROADCAST|3]
+21:48:31 - Got c from [2|localhost|1300] broadcast by [2|localhost|1300]
+21:48:31 - Rebroadcasting... 2
+21:48:31 - Got message [0|0|a|CAUSAL_BROADCAST|3]
+21:48:31 - Got a from [1|localhost|1200] broadcast by [0|localhost|1100]
+21:48:31 - Rebroadcasting... 3
+21:48:31 - Committing [0|0|a|CAUSAL_BROADCAST|3]
+21:48:31 - Committing [1|0|b|CAUSAL_BROADCAST|3]
+21:48:31 - Committing [2|0|c|CAUSAL_BROADCAST|3]
+21:48:32 - Sending message [1|0|b|CAUSAL_BROADCAST|2]
+21:48:32 - Sending message [2|0|c|CAUSAL_BROADCAST|1]
+21:48:32 - Sending message [0|0|a|CAUSAL_BROADCAST|1]
+21:48:32 - Got message [0|0|a|CAUSAL_BROADCAST|3]
+21:48:32 - Got a from [2|localhost|1300] broadcast by [0|localhost|1100]
+21:48:32 - Already had this. No rebroadcast.
+21:48:33 - Sending message [0|0|a|CAUSAL_BROADCAST|2]
+21:48:33 - Sending message [1|0|b|CAUSAL_BROADCAST|4]
+21:48:33 - Sending message [2|0|c|CAUSAL_BROADCAST|2]
+21:48:33 - Got message [2|0|c|CAUSAL_BROADCAST|3]
+21:48:33 - Got c from [1|localhost|1200] broadcast by [2|localhost|1300]
+21:48:33 - Already had this. No rebroadcast.
+21:48:34 - Sending message [0|0|a|CAUSAL_BROADCAST|4]
+21:48:34 - Got message [1|0|b|CAUSAL_BROADCAST|3]
+21:48:34 - Got b from [2|localhost|1300] broadcast by [1|localhost|1200]
+21:48:34 - Already had this. No rebroadcast.
+21:48:34 - Got message [1|0|b|CAUSAL_BROADCAST|3]
+21:48:34 - Got b from [4|localhost|1500] broadcast by [1|localhost|1200]
+21:48:34 - Already had this. No rebroadcast.
+21:48:34 - Got message [0|0|a|CAUSAL_BROADCAST|3]
+21:48:34 - Got a from [4|localhost|1500] broadcast by [0|localhost|1100]
+21:48:34 - Already had this. No rebroadcast.
+21:48:35 - Sending message [2|0|c|CAUSAL_BROADCAST|4]
+21:48:35 - Got message [2|0|c|CAUSAL_BROADCAST|3]
+21:48:35 - Got c from [4|localhost|1500] broadcast by [2|localhost|1300]
+21:48:35 - Already had this. No rebroadcast.
+21:48:36 - Current causal messages:
+21:48:36 - Message 0: a from 0
+21:48:36 - Message 1: b from 1
+21:48:36 - Message 2: c from 2
+21:48:36 - Stopping...
