@@ -1,4 +1,4 @@
-package servent.message;
+package servent.message.util;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import app.AppConfig;
 import app.ServentInfo;
+import servent.message.Message;
 
 /**
  * For now, just the read and send implementation, based on Java serializing.
@@ -20,7 +21,7 @@ public class MessageUtil {
 	 * Normally this should be true, because it helps with debugging.
 	 * Flip this to false to disable printing every message send / receive.
 	 */
-	private static final boolean MESSAGE_UTIL_PRINTING = true;
+	public static final boolean MESSAGE_UTIL_PRINTING = false;
 	
 	public static Message readMessage(Socket socket) {
 		
@@ -50,34 +51,39 @@ public class MessageUtil {
 	
 	public static void sendMessage(Message message) {
 		
-		/*
-		 * A random sleep before sending.
-		 * It is important to take regular naps for health reasons.
-		 */
-		try {
-			Thread.sleep((long)(Math.random() * 1000) + 500);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
-		ServentInfo receiverInfo = message.getReceiverInfo();
-		
-		if (MESSAGE_UTIL_PRINTING) {
-			AppConfig.timestampedStandardPrint("Sending message " + message);
-		}
-		
-		try {
-			Socket sendSocket = new Socket(receiverInfo.getIpAddress(), receiverInfo.getListenerPort());
-			
-			ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
-			
-			oos.writeObject(message);
-			
-			oos.flush();
-			
-			sendSocket.close();
-		} catch (IOException e) {
-			AppConfig.timestampedErrorPrint("Couldn't send message: " + message.toString());
-		}
+//		/*
+//		 * A random sleep before sending.
+//		 * It is important to take regular naps for health reasons.
+//		 */
+//		try {
+//			Thread.sleep((long)(Math.random() * 1000) + 500);
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+//
+//		ServentInfo receiverInfo = message.getReceiverInfo();
+//
+//		if (MESSAGE_UTIL_PRINTING) {
+//			AppConfig.timestampedStandardPrint("Sending message " + message);
+//		}
+//
+//		try {
+//			Socket sendSocket = new Socket(receiverInfo.getIpAddress(), receiverInfo.getListenerPort());
+//
+//			ObjectOutputStream oos = new ObjectOutputStream(sendSocket.getOutputStream());
+//
+//			oos.writeObject(message);
+//
+//			oos.flush();
+//
+//			sendSocket.close();
+//		} catch (IOException e) {
+//			AppConfig.timestampedErrorPrint("Couldn't send message: " + message.toString());
+//		}
+
+		Thread delayedSender = new Thread(new DelayedMessageSender(message));
+
+		delayedSender.start();
+
 	}
 }

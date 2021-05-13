@@ -1,5 +1,7 @@
 package app;
 
+import app.snapshot_bitcake.SnapshotType;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,7 +31,19 @@ public class AppConfig {
 	 * neighbors. 
 	 */
 	public static boolean IS_CLIQUE;
-	
+
+	/**
+	 * Snapshot algorithm selection. Possible values are:
+	 * <ul>
+	 * <li>naive - No algorithm</li>
+	 * <li>cl - Chandy-Lamport - works on FIFO systems</li>
+	 * <li>ly - Lai-Yang - works on non-FIFO systems</li>
+	 * </ul>
+	 */
+	public static SnapshotType SNAPSHOT_TYPE;
+
+	public static Object sendLock = new Object();
+
 	/**
 	 * Print a message to stdout with a timestamp
 	 * @param message message to print
@@ -95,6 +109,19 @@ public class AppConfig {
 		}
 		
 		IS_CLIQUE = Boolean.parseBoolean(properties.getProperty("clique"));
+
+		String snapshotType = properties.getProperty("snapshot");
+		if (snapshotType == null) {
+			snapshotType = "none";
+		}
+		switch (snapshotType) {
+			case "naive":
+				SNAPSHOT_TYPE = SnapshotType.NAIVE;
+				break;
+			default:
+				timestampedErrorPrint("Problem reading snapshot algorithm. Defaulting to NONE.");
+				SNAPSHOT_TYPE = SnapshotType.NONE;
+		}
 		
 		for (int i = 0; i < serventCount; i++) {
 			String portProperty = "servent"+i+".port";

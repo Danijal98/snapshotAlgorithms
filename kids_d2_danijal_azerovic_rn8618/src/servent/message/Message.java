@@ -76,4 +76,21 @@ public interface Message extends Serializable {
 	 * the receiver being changed to the one with the specified <code>id</code>.
 	 */
 	Message changeReceiver(Integer newReceiverId);
+
+	/**
+	 * Alters the message and returns a new copy with everything intact, except
+	 * the receiver being changed to the one with the specified <code>id</code> and the amount.
+	 */
+	Message changeReceiverAndMessage(Integer newReceiverId, String message);
+
+
+	Message changeOriginalDestination(ServentInfo newOriginalDestination);
+
+	/**
+	 * This method is invoked by the frameworks sender code. It is invoked
+	 * exactly before the message is being sent. If the message was held up
+	 * by an event or a queue, this ensures that we perform the effect as
+	 * we are sending the message.
+	 */
+	void sendEffect();
 }

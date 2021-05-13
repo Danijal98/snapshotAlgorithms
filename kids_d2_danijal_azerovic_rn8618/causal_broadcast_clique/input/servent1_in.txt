@@ -1,5 +1,5 @@
 info
-pause 2000
+pause 4000
 causal_broadcast b
 pause 10000
 print_causal

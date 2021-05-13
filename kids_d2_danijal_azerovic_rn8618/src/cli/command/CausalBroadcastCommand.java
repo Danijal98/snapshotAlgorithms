@@ -1,13 +1,14 @@
 package cli.command;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import app.AppConfig;
 import app.CausalBroadcastShared;
 import app.ServentInfo;
 import servent.message.CausalBroadcastMessage;
 import servent.message.Message;
-import servent.message.MessageUtil;
+import servent.message.util.MessageUtil;
 
 public class CausalBroadcastCommand implements CLICommand {
 
@@ -30,7 +31,7 @@ public class CausalBroadcastCommand implements CLICommand {
 		ServentInfo myInfo = AppConfig.myServentInfo;
 		Map<Integer, Integer> myClock = CausalBroadcastShared.getVectorClock();
 		Message broadcastMessage = new CausalBroadcastMessage(
-				myInfo, myInfo, msgToSend, myClock);
+				myInfo, myInfo, msgToSend, mapDeepCopy(myClock));
 		for (Integer neighbor : AppConfig.myServentInfo.getNeighbors()) {
 
 			MessageUtil.sendMessage(broadcastMessage.changeReceiver(neighbor));
@@ -41,6 +42,15 @@ public class CausalBroadcastCommand implements CLICommand {
 		CausalBroadcastShared.addPendingMessage(broadcastMessage);
 		CausalBroadcastShared.checkPendingMessages();
 
+	}
+
+	public static ConcurrentHashMap<Integer, Integer> mapDeepCopy (Map<Integer, Integer> original) {
+		ConcurrentHashMap<Integer, Integer> copy = new ConcurrentHashMap<>();
+		for (Map.Entry<Integer, Integer> entry : original.entrySet())
+		{
+			copy.put(entry.getKey(), entry.getValue());
+		}
+		return copy;
 	}
 
 }

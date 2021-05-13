@@ -6,12 +6,8 @@ import java.util.Scanner;
 
 import app.AppConfig;
 import app.Cancellable;
-import cli.command.CLICommand;
-import cli.command.CausalBroadcastCommand;
-import cli.command.InfoCommand;
-import cli.command.PauseCommand;
-import cli.command.PrintCausalCommand;
-import cli.command.StopCommand;
+import app.snapshot_bitcake.SnapshotCollector;
+import cli.command.*;
 import servent.SimpleServentListener;
 
 /**
@@ -38,14 +34,16 @@ public class CLIParser implements Runnable, Cancellable {
 	
 	private final List<CLICommand> commandList;
 	
-	public CLIParser(SimpleServentListener listener) {
+	public CLIParser(SimpleServentListener listener, SnapshotCollector snapshotCollector) {
 		this.commandList = new ArrayList<>();
 		
 		commandList.add(new InfoCommand());
 		commandList.add(new PauseCommand());
 		commandList.add(new CausalBroadcastCommand());
 		commandList.add(new PrintCausalCommand());
-		commandList.add(new StopCommand(this, listener));
+		commandList.add(new StopCommand(this, listener, snapshotCollector));
+		commandList.add(new TransactionBurstCommand(snapshotCollector.getBitcakeManager()));
+		commandList.add(new BitcakeInfoCommand(snapshotCollector));
 	}
 	
 	@Override
@@ -61,7 +59,7 @@ public class CLIParser implements Runnable, Cancellable {
 			String commandArgs = null;
 			if (spacePos != -1) {
 				commandName = commandLine.substring(0, spacePos);
-				commandArgs = commandLine.substring(spacePos+1, commandLine.length());
+				commandArgs = commandLine.substring(spacePos+1);
 			} else {
 				commandName = commandLine;
 			}

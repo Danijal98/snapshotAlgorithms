@@ -19,7 +19,6 @@ import app.ServentInfo;
  */
 public class CausalBroadcastMessage extends BasicMessage {
 
-	private static final long serialVersionUID = 7952273798396080816L;
 	private final Map<Integer, Integer> senderVectorClock;
 	
 	public CausalBroadcastMessage(ServentInfo senderInfo, ServentInfo receiverInfo, String messageText,
@@ -29,9 +28,23 @@ public class CausalBroadcastMessage extends BasicMessage {
 		this.senderVectorClock = senderVectorClock;
 	}
 
-	private CausalBroadcastMessage(ServentInfo senderInfo, ServentInfo receiverInfo, String messageText,
+	public CausalBroadcastMessage(MessageType messageType, ServentInfo senderInfo, ServentInfo receiverInfo, String messageText,
+								  Map<Integer, Integer> senderVectorClock) {
+		super(messageType, senderInfo, receiverInfo, messageText);
+
+		this.senderVectorClock = senderVectorClock;
+	}
+
+	public CausalBroadcastMessage(ServentInfo senderInfo, ServentInfo receiverInfo, String messageText,
 								  Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
 		super(MessageType.CAUSAL_BROADCAST, senderInfo, receiverInfo, routeList, messageText, messageId);
+
+		this.senderVectorClock = senderVectorClock;
+	}
+
+	public CausalBroadcastMessage(MessageType messageType, ServentInfo senderInfo, ServentInfo receiverInfo, String messageText,
+								  Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
+		super(messageType, senderInfo, receiverInfo, routeList, messageText, messageId);
 
 		this.senderVectorClock = senderVectorClock;
 	}

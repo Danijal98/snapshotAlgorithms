@@ -5,7 +5,7 @@ import app.CausalBroadcastShared;
 import app.ServentInfo;
 import servent.message.Message;
 import servent.message.MessageType;
-import servent.message.MessageUtil;
+import servent.message.util.MessageUtil;
 
 import java.util.Collections;
 import java.util.Set;
@@ -51,6 +51,7 @@ public class CausalBroadcastHandler implements MessageHandler {
 
 			AppConfig.timestampedStandardPrint(text);
 
+
 			if (doRebroadcast) {
 				if (senderInfo.getId() == AppConfig.myServentInfo.getId()) {
 					//We are the sender :o someone bounced this back to us. /ignore
@@ -63,7 +64,6 @@ public class CausalBroadcastHandler implements MessageHandler {
 						//New message for us. Rebroadcast it.
 						AppConfig.timestampedStandardPrint("Rebroadcasting... " + receivedBroadcasts.size());
 
-						// todo think about this
 						CausalBroadcastShared.addPendingMessage(clientMessage);
 						CausalBroadcastShared.checkPendingMessages();
 
@@ -78,6 +78,7 @@ public class CausalBroadcastHandler implements MessageHandler {
 					}
 				}
 			}
+
 
 		}
 	}

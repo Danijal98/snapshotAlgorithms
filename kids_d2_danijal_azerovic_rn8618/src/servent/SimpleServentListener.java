@@ -9,15 +9,26 @@ import java.util.concurrent.Executors;
 
 import app.AppConfig;
 import app.Cancellable;
+import app.snapshot_bitcake.SnapshotCollector;
 import servent.handler.CausalBroadcastHandler;
 import servent.handler.MessageHandler;
 import servent.handler.NullHandler;
+import servent.handler.TransactionHandler;
+import servent.handler.snapshot.NaiveAskAmountHandler;
+import servent.handler.snapshot.NaiveTellAmountHandler;
+import servent.handler.snapshot.NaiveTokenAmountHandler;
 import servent.message.Message;
-import servent.message.MessageUtil;
+import servent.message.util.MessageUtil;
 
 public class SimpleServentListener implements Runnable, Cancellable {
 
 	private volatile boolean working = true;
+
+	private SnapshotCollector snapshotCollector;
+
+	public SimpleServentListener(SnapshotCollector snapshotCollector) {
+		this.snapshotCollector = snapshotCollector;
+	}
 	
 	/*
 	 * Thread pool for executing the handlers. Each client will get it's own handler thread.
@@ -55,9 +66,21 @@ public class SimpleServentListener implements Runnable, Cancellable {
 				 * because that way is much simpler and less error prone.
 				 */
 				switch (clientMessage.getMessageType()) {
-				case CAUSAL_BROADCAST:
-					messageHandler = new CausalBroadcastHandler(clientMessage, !AppConfig.IS_CLIQUE);
-					break;
+					case CAUSAL_BROADCAST:
+						messageHandler = new CausalBroadcastHandler(clientMessage, !AppConfig.IS_CLIQUE);
+						break;
+					case TRANSACTION:
+						messageHandler = new TransactionHandler(clientMessage, snapshotCollector.getBitcakeManager(), !AppConfig.IS_CLIQUE);
+						break;
+					case NAIVE_TOKEN_AMOUNT:
+						messageHandler = new NaiveTokenAmountHandler(clientMessage, snapshotCollector, snapshotCollector.getBitcakeManager(), !AppConfig.IS_CLIQUE);
+						break;
+					case NAIVE_ASK_AMOUNT:
+						messageHandler = new NaiveAskAmountHandler(clientMessage, snapshotCollector.getBitcakeManager());
+						break;
+					case NAIVE_TELL_AMOUNT:
+						messageHandler = new NaiveTellAmountHandler(clientMessage, snapshotCollector);
+						break;
 				}
 				
 				threadPool.submit(messageHandler);

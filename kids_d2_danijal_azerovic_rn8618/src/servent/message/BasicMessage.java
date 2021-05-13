@@ -17,7 +17,6 @@ import app.ServentInfo;
  */
 public class BasicMessage implements Message {
 
-	private static final long serialVersionUID = -9075856313609777945L;
 	private final MessageType type;
 	private final ServentInfo originalSenderInfo;
 	private final ServentInfo receiverInfo;
@@ -127,7 +126,17 @@ public class BasicMessage implements Message {
 		}
 		
 	}
-	
+
+	@Override
+	public Message changeReceiverAndMessage(Integer newReceiverId, String message) {
+		return null;
+	}
+
+	@Override
+	public Message changeOriginalDestination(ServentInfo newOriginalDestination) {
+		return null;
+	}
+
 	/**
 	 * Comparing messages is based on their unique id and the original sender id.
 	 */
@@ -163,4 +172,13 @@ public class BasicMessage implements Message {
 					getMessageText() + "|" + getMessageType() + "|" +
 					getReceiverInfo().getId() + "]";
 	}
+
+	/**
+	 * Empty implementation, which will be suitable for most messages.
+	 */
+	@Override
+	public void sendEffect() {
+
+	}
+
 }

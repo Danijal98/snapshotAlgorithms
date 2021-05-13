@@ -95,17 +95,17 @@ public class CausalBroadcastShared {
 				while (iterator.hasNext()) {
 					Message pendingMessage = iterator.next();
 					CausalBroadcastMessage causalPendingMessage = (CausalBroadcastMessage)pendingMessage;
-					
-					if (!otherClockGreater(myVectorClock, causalPendingMessage.getSenderVectorClock())) {
-						gotWork = true;
-						
-						AppConfig.timestampedStandardPrint("Committing " + pendingMessage);
-						commitedCausalMessageList.add(pendingMessage);
-						incrementClock(pendingMessage.getOriginalSenderInfo().getId());
-	
-						iterator.remove();
-						
-						break;
+					synchronized (AppConfig.sendLock) {
+						if (!otherClockGreater(myVectorClock, causalPendingMessage.getSenderVectorClock())) {
+							gotWork = true;
+
+							commitedCausalMessageList.add(pendingMessage);
+							incrementClock(pendingMessage.getOriginalSenderInfo().getId());
+
+							iterator.remove();
+
+							break;
+						}
 					}
 				}
 			}

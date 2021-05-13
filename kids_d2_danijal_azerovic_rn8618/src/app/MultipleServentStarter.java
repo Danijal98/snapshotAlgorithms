@@ -106,8 +106,9 @@ public class MultipleServentStarter {
 	
 	public static void main(String[] args) {
 		
-		startServentTest("causal_broadcast_clique");
-		
+//		startServentTest("causal_broadcast_clique");
+		startServentTest("snapshots");
+
 	}
 
 }
