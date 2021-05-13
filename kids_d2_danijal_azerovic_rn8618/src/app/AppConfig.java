@@ -43,6 +43,7 @@ public class AppConfig {
 	public static SnapshotType SNAPSHOT_TYPE;
 
 	public static Object sendLock = new Object();
+	public static Object bitcakeLock = new Object();
 
 	/**
 	 * Print a message to stdout with a timestamp
@@ -117,6 +118,12 @@ public class AppConfig {
 		switch (snapshotType) {
 			case "naive":
 				SNAPSHOT_TYPE = SnapshotType.NAIVE;
+				break;
+			case "av":
+				SNAPSHOT_TYPE = SnapshotType.ALAGAR_VENKATESAN;
+				break;
+			case "ab":
+				SNAPSHOT_TYPE = SnapshotType.ACHARYA_BADRINATH;
 				break;
 			default:
 				timestampedErrorPrint("Problem reading snapshot algorithm. Defaulting to NONE.");

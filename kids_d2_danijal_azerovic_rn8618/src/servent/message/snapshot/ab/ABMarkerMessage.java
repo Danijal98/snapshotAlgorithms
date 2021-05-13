@@ -1,23 +1,25 @@
-package servent.message.snapshot;
+package servent.message.snapshot.ab;
 
 import app.AppConfig;
 import app.ServentInfo;
+import servent.message.BasicMessage;
 import servent.message.CausalBroadcastMessage;
 import servent.message.Message;
 import servent.message.MessageType;
+import servent.message.snapshot.naive.NaiveAskAmountMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NaiveAskAmountMessage extends CausalBroadcastMessage {
+public class ABMarkerMessage extends CausalBroadcastMessage {
 
-	public NaiveAskAmountMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock) {
-		super(MessageType.NAIVE_ASK_AMOUNT, sender, receiver, "ASK", senderVectorClock);
+	public ABMarkerMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock) {
+		super(MessageType.AB_MARKER, sender, receiver, "ABMarkerMessage", mapDeepCopy(senderVectorClock));
 	}
 
-	private NaiveAskAmountMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
-		super(MessageType.NAIVE_ASK_AMOUNT, sender, receiver, "ASK", senderVectorClock, routeList, messageId);
+	private ABMarkerMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
+		super(MessageType.AB_MARKER, sender, receiver, "ABMarkerMessage", senderVectorClock, routeList, messageId);
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class NaiveAskAmountMessage extends CausalBroadcastMessage {
 			List<ServentInfo> newRouteList = new ArrayList<>(getRoute());
 			newRouteList.add(newRouteItem);
 
-			return new NaiveAskAmountMessage(getOriginalSenderInfo(), getReceiverInfo(),
+			return new ABMarkerMessage(getOriginalSenderInfo(), getReceiverInfo(),
 					mapDeepCopy(getSenderVectorClock()), newRouteList, getMessageId());
 		}
 	}
@@ -38,7 +40,7 @@ public class NaiveAskAmountMessage extends CausalBroadcastMessage {
 			synchronized (AppConfig.sendLock) {
 				ServentInfo newReceiverInfo = AppConfig.getInfoById(newReceiverId);
 
-				return new NaiveAskAmountMessage(getOriginalSenderInfo(), newReceiverInfo,
+				return new ABMarkerMessage(getOriginalSenderInfo(), newReceiverInfo,
 						mapDeepCopy(getSenderVectorClock()), getRoute(), getMessageId());
 			}
 		} else {
@@ -48,8 +50,4 @@ public class NaiveAskAmountMessage extends CausalBroadcastMessage {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "ASK MESSAGE -> TEXT: " + this.getMessageText() + " ORIGINAL SENDER: " + this.getOriginalSenderInfo() + " RECEIVER: " + this.getReceiverInfo();
-	}
 }

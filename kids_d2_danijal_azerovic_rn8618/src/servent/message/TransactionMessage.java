@@ -2,6 +2,7 @@ package servent.message;
 
 import app.AppConfig;
 import app.ServentInfo;
+import app.snapshot_bitcake.ABBitcakeManager;
 import app.snapshot_bitcake.BitcakeManager;
 
 import java.util.ArrayList;
@@ -89,6 +90,13 @@ public class TransactionMessage extends CausalBroadcastMessage {
 		if((AppConfig.myServentInfo.getId() == getOriginalSenderInfo().getId()) && getReceiverInfo().getId() == originalDestination.getId()) {
 			int amount = Integer.parseInt(getMessageText());
 			bitcakeManager.takeSomeBitcakes(amount);
+
+			if (bitcakeManager instanceof ABBitcakeManager) {
+				ABBitcakeManager abBitcakeManager = (ABBitcakeManager) bitcakeManager;
+				synchronized (AppConfig.bitcakeLock) {
+					abBitcakeManager.recordSentTransaction(getReceiverInfo().getId(), amount);
+				}
+			}
 		}
 	}
 

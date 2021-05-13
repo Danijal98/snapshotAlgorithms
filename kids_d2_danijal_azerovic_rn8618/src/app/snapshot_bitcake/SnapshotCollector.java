@@ -13,6 +13,7 @@ public interface SnapshotCollector extends Runnable, Cancellable {
 	BitcakeManager getBitcakeManager();
 
 	void addNaiveSnapshotInfo(String snapshotSubject, int amount);
+	void addABSnapshotInfo(int id, ABSnapshotResult abSnapshotResult);
 
 	void startCollecting();
 

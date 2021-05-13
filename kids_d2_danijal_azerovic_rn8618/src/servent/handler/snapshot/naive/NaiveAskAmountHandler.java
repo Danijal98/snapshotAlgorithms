@@ -1,16 +1,14 @@
-package servent.handler.snapshot;
+package servent.handler.snapshot.naive;
 
 import app.AppConfig;
 import app.CausalBroadcastShared;
 import app.ServentInfo;
 import app.snapshot_bitcake.BitcakeManager;
-import app.snapshot_bitcake.SnapshotCollector;
 import servent.handler.MessageHandler;
 import servent.message.Message;
 import servent.message.MessageType;
-import servent.message.snapshot.NaiveAskAmountMessage;
-import servent.message.snapshot.NaiveTellAmountMessage;
-import servent.message.snapshot.NaiveTokenAmountMessage;
+import servent.message.snapshot.naive.NaiveAskAmountMessage;
+import servent.message.snapshot.naive.NaiveTellAmountMessage;
 import servent.message.util.MessageUtil;
 
 import java.util.Collections;

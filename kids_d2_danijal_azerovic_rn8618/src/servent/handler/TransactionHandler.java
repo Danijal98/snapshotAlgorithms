@@ -3,6 +3,7 @@ package servent.handler;
 import app.AppConfig;
 import app.CausalBroadcastShared;
 import app.ServentInfo;
+import app.snapshot_bitcake.ABBitcakeManager;
 import app.snapshot_bitcake.BitcakeManager;
 import servent.message.Message;
 import servent.message.MessageType;
@@ -59,9 +60,14 @@ public class TransactionHandler implements MessageHandler {
 						//New message for us. Rebroadcast it.
 //						AppConfig.timestampedStandardPrint("Rebroadcasting... " + receivedBroadcasts.size());
 
-						//todo
 						if(AppConfig.myServentInfo.getId() == ((TransactionMessage)clientMessage).getOriginalDestination().getId()) {
 							bitcakeManager.addSomeBitcakes(amountNumber);
+							if (bitcakeManager instanceof ABBitcakeManager) {
+								ABBitcakeManager abBitcakeManager = (ABBitcakeManager) bitcakeManager;
+								synchronized (AppConfig.bitcakeLock) {
+									abBitcakeManager.recordReceivedTransaction(clientMessage.getOriginalSenderInfo().getId(), amountNumber);
+								}
+							}
 						}
 
 						CausalBroadcastShared.addPendingMessage(clientMessage);

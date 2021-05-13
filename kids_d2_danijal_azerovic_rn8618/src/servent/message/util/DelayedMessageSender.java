@@ -3,9 +3,7 @@ package servent.message.util;
 import app.AppConfig;
 import app.ServentInfo;
 import servent.message.Message;
-import servent.message.snapshot.NaiveAskAmountMessage;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 

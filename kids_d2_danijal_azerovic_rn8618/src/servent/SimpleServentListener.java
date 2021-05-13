@@ -9,15 +9,20 @@ import java.util.concurrent.Executors;
 
 import app.AppConfig;
 import app.Cancellable;
+import app.snapshot_bitcake.ABBitcakeManager;
 import app.snapshot_bitcake.SnapshotCollector;
+import app.snapshot_bitcake.SnapshotType;
 import servent.handler.CausalBroadcastHandler;
 import servent.handler.MessageHandler;
 import servent.handler.NullHandler;
 import servent.handler.TransactionHandler;
-import servent.handler.snapshot.NaiveAskAmountHandler;
-import servent.handler.snapshot.NaiveTellAmountHandler;
+import servent.handler.snapshot.ab.ABMarkerHandler;
+import servent.handler.snapshot.ab.ABTellHandler;
+import servent.handler.snapshot.naive.NaiveAskAmountHandler;
+import servent.handler.snapshot.naive.NaiveTellAmountHandler;
 import servent.handler.snapshot.NaiveTokenAmountHandler;
 import servent.message.Message;
+import servent.message.MessageType;
 import servent.message.util.MessageUtil;
 
 public class SimpleServentListener implements Runnable, Cancellable {
@@ -58,6 +63,18 @@ public class SimpleServentListener implements Runnable, Cancellable {
 				
 				//GOT A MESSAGE! <3
 				Message clientMessage = MessageUtil.readMessage(clientSocket);
+
+				// ACHARYA_BADRINATH
+				if (AppConfig.SNAPSHOT_TYPE == SnapshotType.ACHARYA_BADRINATH) {
+					if (clientMessage.getMessageType() != MessageType.AB_MARKER) {
+						ABBitcakeManager abBitcakeManager =
+								(ABBitcakeManager)snapshotCollector.getBitcakeManager();
+//						abBitcakeManager.addChannelMessage(clientMessage);
+					}
+				}
+
+				// TODO ALAGAR_VENKATESAN
+
 				MessageHandler messageHandler = new NullHandler(clientMessage);
 				
 				/*
@@ -81,6 +98,13 @@ public class SimpleServentListener implements Runnable, Cancellable {
 					case NAIVE_TELL_AMOUNT:
 						messageHandler = new NaiveTellAmountHandler(clientMessage, snapshotCollector);
 						break;
+					case AB_MARKER:
+						messageHandler = new ABMarkerHandler(clientMessage, snapshotCollector.getBitcakeManager());
+						break;
+					case AB_TELL:
+						messageHandler = new ABTellHandler(clientMessage, snapshotCollector);
+						break;
+					//todo
 				}
 				
 				threadPool.submit(messageHandler);

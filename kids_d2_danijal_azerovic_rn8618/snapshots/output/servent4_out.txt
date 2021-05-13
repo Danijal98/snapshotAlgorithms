@@ -1,29 +1,20 @@
-10:14:24 - Starting servent [4|localhost|1500]
-10:14:24 - Pausing for 1000 ms
-10:14:25 - Pausing for 25000 ms
-{node4=1000, node3=1301}
-10:14:33 - Got own message back. No rebroadcast.
-{node4=1000, node3=1301}
-{node4=1000, node3=1301, node0=887}
-{node4=1000, node2=730, node3=1301, node0=887}
-{node4=1000, node2=730, node3=1301, node0=887, node1=714}
-10:14:40 - Info for node4 = 1000 bitcake
-10:14:40 - Info for node2 = 730 bitcake
-10:14:40 - Info for node3 = 1301 bitcake
-10:14:40 - Info for node0 = 887 bitcake
-10:14:40 - Info for node1 = 714 bitcake
-10:14:40 - System bitcake count: 4632
-10:14:50 - Pausing for 25000 ms
-{node4=1000, node3=1591}
-10:14:53 - Got own message back. No rebroadcast.
-{node4=1000, node2=730, node3=1591}
-{node4=1000, node2=730, node3=1591}
-{node4=1000, node2=730, node3=1591, node1=714}
-{node4=1000, node2=730, node3=1591, node0=965, node1=714}
-10:14:57 - Info for node4 = 1000 bitcake
-10:14:57 - Info for node2 = 730 bitcake
-10:14:57 - Info for node3 = 1591 bitcake
-10:14:57 - Info for node0 = 965 bitcake
-10:14:57 - Info for node1 = 714 bitcake
-10:14:57 - System bitcake count: 5000
-10:15:15 - Stopping...
+21:37:10 - Starting servent [4|localhost|1500]
+21:37:10 - Pausing for 1000 ms
+21:37:11 - Pausing for 25000 ms
+21:37:18 - Got own message back. No rebroadcast.
+21:37:25 - Recorded bitcake amount for 0 = 982
+21:37:25 - Recorded bitcake amount for 1 = 760
+21:37:25 - Recorded bitcake amount for 2 = 759
+21:37:25 - Recorded bitcake amount for 3 = 1314
+21:37:25 - Recorded bitcake amount for 4 = 1000
+21:37:25 - Unreceived bitcake amount: 185 from servent 2 to servent 3
+21:37:25 - System bitcake count: 5000
+21:37:36 - Pausing for 25000 ms
+21:37:39 - Got own message back. No rebroadcast.
+21:37:45 - Recorded bitcake amount for 0 = 982
+21:37:45 - Recorded bitcake amount for 1 = 760
+21:37:45 - Recorded bitcake amount for 2 = 759
+21:37:45 - Recorded bitcake amount for 3 = 1499
+21:37:45 - Recorded bitcake amount for 4 = 1000
+21:37:45 - System bitcake count: 5000
+21:38:01 - Stopping...

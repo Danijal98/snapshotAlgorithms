@@ -1,8 +1,7 @@
-package servent.message.snapshot;
+package servent.message.snapshot.naive;
 
 import app.AppConfig;
 import app.ServentInfo;
-import servent.message.BasicMessage;
 import servent.message.CausalBroadcastMessage;
 import servent.message.Message;
 import servent.message.MessageType;
