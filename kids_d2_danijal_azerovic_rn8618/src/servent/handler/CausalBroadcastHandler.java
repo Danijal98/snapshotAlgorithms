@@ -74,7 +74,7 @@ public class CausalBroadcastHandler implements MessageHandler {
 
 					} else {
 						//We already got this from somewhere else. /ignore
-						AppConfig.timestampedStandardPrint("Already had this. No rebroadcast.");
+//						AppConfig.timestampedStandardPrint("Already had this. No rebroadcast.");
 					}
 				}
 			}

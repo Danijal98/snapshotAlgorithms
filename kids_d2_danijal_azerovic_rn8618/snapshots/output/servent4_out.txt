@@ -1,20 +1,19 @@
-21:37:10 - Starting servent [4|localhost|1500]
-21:37:10 - Pausing for 1000 ms
-21:37:11 - Pausing for 25000 ms
-21:37:18 - Got own message back. No rebroadcast.
-21:37:25 - Recorded bitcake amount for 0 = 982
-21:37:25 - Recorded bitcake amount for 1 = 760
-21:37:25 - Recorded bitcake amount for 2 = 759
-21:37:25 - Recorded bitcake amount for 3 = 1314
-21:37:25 - Recorded bitcake amount for 4 = 1000
-21:37:25 - Unreceived bitcake amount: 185 from servent 2 to servent 3
-21:37:25 - System bitcake count: 5000
-21:37:36 - Pausing for 25000 ms
-21:37:39 - Got own message back. No rebroadcast.
-21:37:45 - Recorded bitcake amount for 0 = 982
-21:37:45 - Recorded bitcake amount for 1 = 760
-21:37:45 - Recorded bitcake amount for 2 = 759
-21:37:45 - Recorded bitcake amount for 3 = 1499
-21:37:45 - Recorded bitcake amount for 4 = 1000
-21:37:45 - System bitcake count: 5000
-21:38:01 - Stopping...
+17:07:07 - Starting servent [4|localhost|1500]
+17:07:07 - Pausing for 1000 ms
+17:07:08 - Pausing for 25000 ms
+17:07:23 - Channel transactions: {3=0}
+17:07:24 - Info for 0 = 1065 bitcake
+17:07:24 - Info for 1 = 669 bitcake
+17:07:24 - Info for 2 = 734 bitcake
+17:07:24 - Info for 3 = 1287 bitcake
+17:07:24 - Info for 4 = 1000 bitcake
+17:07:24 - System bitcake count: 4755
+17:07:33 - Pausing for 25000 ms
+17:07:41 - Channel transactions: {3=0}
+17:07:42 - Info for 0 = 1065 bitcake
+17:07:42 - Info for 1 = 669 bitcake
+17:07:42 - Info for 2 = 734 bitcake
+17:07:42 - Info for 3 = 1532 bitcake
+17:07:42 - Info for 4 = 1000 bitcake
+17:07:42 - System bitcake count: 5000
+17:07:58 - Stopping...

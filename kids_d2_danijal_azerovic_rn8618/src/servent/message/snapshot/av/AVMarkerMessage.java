@@ -11,14 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents message that can be of type marker or terminate
+ */
 public class AVMarkerMessage extends CausalBroadcastMessage {
 
-	public AVMarkerMessage(ServentInfo sender, ServentInfo receiver, int collectorId, Map<Integer, Integer> senderVectorClock) {
-		super(MessageType.AV_MARKER, sender, receiver, String.valueOf(collectorId), mapDeepCopy(senderVectorClock));
+	public AVMarkerMessage(MessageType messageType, ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock) {
+		super(messageType, sender, receiver, "AV " + messageType.name(), mapDeepCopy(senderVectorClock));
 	}
 
-	private AVMarkerMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
-		super(MessageType.AV_MARKER, sender, receiver, "ASK", senderVectorClock, routeList, messageId);
+	public AVMarkerMessage(ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock) {
+		super(MessageType.AV_MARKER, sender, receiver, "AVMarker", mapDeepCopy(senderVectorClock));
+	}
+
+	private AVMarkerMessage(MessageType messageType, ServentInfo sender, ServentInfo receiver, Map<Integer, Integer> senderVectorClock, List<ServentInfo> routeList, int messageId) {
+		super(messageType, sender, receiver, "AVMarker", mapDeepCopy(senderVectorClock), routeList, messageId);
 	}
 
 	@Override
@@ -28,7 +35,7 @@ public class AVMarkerMessage extends CausalBroadcastMessage {
 			List<ServentInfo> newRouteList = new ArrayList<>(getRoute());
 			newRouteList.add(newRouteItem);
 
-			return new AVMarkerMessage(getOriginalSenderInfo(), getReceiverInfo(),
+			return new AVMarkerMessage(getMessageType(), getOriginalSenderInfo(), getReceiverInfo(),
 					mapDeepCopy(getSenderVectorClock()), newRouteList, getMessageId());
 		}
 	}
@@ -39,7 +46,7 @@ public class AVMarkerMessage extends CausalBroadcastMessage {
 			synchronized (AppConfig.sendLock) {
 				ServentInfo newReceiverInfo = AppConfig.getInfoById(newReceiverId);
 
-				return new AVMarkerMessage(getOriginalSenderInfo(), newReceiverInfo,
+				return new AVMarkerMessage(getMessageType(), getOriginalSenderInfo(), newReceiverInfo,
 						mapDeepCopy(getSenderVectorClock()), getRoute(), getMessageId());
 			}
 		} else {
@@ -49,4 +56,8 @@ public class AVMarkerMessage extends CausalBroadcastMessage {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "MessageType: " + getMessageType();
+	}
 }

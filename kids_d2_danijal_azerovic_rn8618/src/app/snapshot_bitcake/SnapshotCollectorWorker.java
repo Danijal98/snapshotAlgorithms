@@ -4,7 +4,9 @@ import app.AppConfig;
 import app.CausalBroadcastShared;
 import servent.message.CausalBroadcastMessage;
 import servent.message.Message;
+import servent.message.MessageType;
 import servent.message.snapshot.ab.ABMarkerMessage;
+import servent.message.snapshot.av.AVMarkerMessage;
 import servent.message.snapshot.naive.NaiveAskAmountMessage;
 import servent.message.util.MessageUtil;
 
@@ -27,6 +29,7 @@ public class SnapshotCollectorWorker implements SnapshotCollector {
 
     private final Map<String, Integer> collectedNaiveValues = new ConcurrentHashMap<>();
     private final Map<Integer, ABSnapshotResult> collectedABValues = new ConcurrentHashMap<>();
+    private final Map<Integer, Integer> collectedAVValues = new ConcurrentHashMap<>();
 
     private SnapshotType snapshotType = SnapshotType.NAIVE;
 
@@ -116,7 +119,17 @@ public class SnapshotCollectorWorker implements SnapshotCollector {
                     break;
                 case ALAGAR_VENKATESAN:
                     Map<Integer, Integer> avClock = CausalBroadcastShared.getVectorClock();
-                    //todo
+                    Message avMessage = new AVMarkerMessage(AppConfig.myServentInfo, AppConfig.myServentInfo, CausalBroadcastMessage.mapDeepCopy(avClock));
+
+                    for (Integer neighbor : AppConfig.myServentInfo.getNeighbors()) {
+                        Message msg = avMessage.changeReceiver(neighbor);
+                        MessageUtil.sendMessage(msg);
+                    }
+
+                    ((AVBitcakeManager)bitcakeManager).initializeChannelTransactions();
+                    CausalBroadcastShared.addPendingMessage(avMessage);
+                    CausalBroadcastShared.checkPendingMessages();
+                    collectedAVValues.put(AppConfig.myServentInfo.getId(), bitcakeManager.getCurrentBitcakeAmount());
                     break;
                 case NONE:
                     //Shouldn't be able to come here. See constructor.
@@ -138,7 +151,19 @@ public class SnapshotCollectorWorker implements SnapshotCollector {
                         }
                         break;
                     case ALAGAR_VENKATESAN:
-                        //todo
+                        if (collectedAVValues.size() == AppConfig.getServentCount()) {
+                            //send ask terminate messages
+                            Map<Integer, Integer> avClock = CausalBroadcastShared.getVectorClock();
+                            Message avMessage = new AVMarkerMessage(MessageType.AV_TERMINATE, AppConfig.myServentInfo, AppConfig.myServentInfo, CausalBroadcastMessage.mapDeepCopy(avClock));
+
+                            AVBitcakeManager avBitcakeManager = (AVBitcakeManager) bitcakeManager;
+                            AppConfig.timestampedStandardPrint("Channel transactions: " + avBitcakeManager.getChannelTransactions().toString());
+                            for (Integer neighbor : AppConfig.myServentInfo.getNeighbors()) {
+                                Message msg = avMessage.changeReceiver(neighbor);
+                                MessageUtil.sendMessage(msg);
+                            }
+                            waiting = false;
+                        }
                         break;
                     case NONE:
                         //Shouldn't be able to come here. See constructor.
@@ -205,7 +230,16 @@ public class SnapshotCollectorWorker implements SnapshotCollector {
 
                     break;
                 case ALAGAR_VENKATESAN:
-                    //todo
+                    sum = 0;
+                    for (Entry<Integer, Integer> itemAmount : collectedAVValues.entrySet()) {
+                        sum += itemAmount.getValue();
+                        AppConfig.timestampedStandardPrint(
+                                "Info for " + itemAmount.getKey() + " = " + itemAmount.getValue() + " bitcake");
+                    }
+
+                    AppConfig.timestampedStandardPrint("System bitcake count: " + sum);
+
+                    collectedAVValues.clear(); //reset for next invocation
                     break;
                 case NONE:
                     //Shouldn't be able to come here. See constructor.
@@ -224,6 +258,11 @@ public class SnapshotCollectorWorker implements SnapshotCollector {
     @Override
     public void addABSnapshotInfo(int id, ABSnapshotResult abSnapshotResult) {
         collectedABValues.put(id, abSnapshotResult);
+    }
+
+    @Override
+    public void addAVSnapshotInfo(int id, int amount) {
+        collectedAVValues.put(id, amount);
     }
 
     @Override

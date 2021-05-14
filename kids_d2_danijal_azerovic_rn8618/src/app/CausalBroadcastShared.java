@@ -81,6 +81,10 @@ public class CausalBroadcastShared {
 		
 		return false;
 	}
+
+	public static boolean checkIfMessageOld(CausalBroadcastMessage msg) {
+		return !otherClockGreater(msg.getSenderVectorClock(), AppConfig.tokenClock);
+	}
 	
 	public static void checkPendingMessages() {
 		boolean gotWork = true;

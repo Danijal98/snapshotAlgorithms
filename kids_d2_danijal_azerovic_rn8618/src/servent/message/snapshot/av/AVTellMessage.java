@@ -13,24 +13,17 @@ import java.util.Map;
 
 public class AVTellMessage extends CausalBroadcastMessage {
 
-	private final ABSnapshotResult abSnapshotResult;
 	private final ServentInfo originalDestination;
-	
-	public AVTellMessage(ServentInfo originalDestination, ServentInfo sender, ServentInfo receiver, ABSnapshotResult abSnapshotResult, Map<Integer, Integer> senderVectorClock) {
-		super(MessageType.AV_TELL, sender, receiver, "AB_TELL", mapDeepCopy(senderVectorClock));
-		this.abSnapshotResult = abSnapshotResult;
-		this.originalDestination = originalDestination;
-	}
-	
-	private AVTellMessage(ServentInfo originalDestination, ServentInfo sender, ServentInfo receiver, List<ServentInfo> routeList,
-						  int messageId, ABSnapshotResult abSnapshotResult, Map<Integer, Integer> senderVectorClock) {
-		super(MessageType.AB_TELL, sender, receiver, "AB_TELL", mapDeepCopy(senderVectorClock), routeList, messageId);
-		this.abSnapshotResult = abSnapshotResult;
-		this.originalDestination = originalDestination;
-	}
 
-	public ABSnapshotResult getABSnapshotResult() {
-		return abSnapshotResult;
+	public AVTellMessage(MessageType messageType, ServentInfo originalDestination, ServentInfo sender, ServentInfo receiver, int amount, Map<Integer, Integer> senderVectorClock) {
+		super(messageType, sender, receiver, String.valueOf(amount), mapDeepCopy(senderVectorClock));
+		this.originalDestination = originalDestination;
+	}
+	
+	private AVTellMessage(MessageType messageType, ServentInfo originalDestination, ServentInfo sender, ServentInfo receiver, List<ServentInfo> routeList,
+						  int messageId, String amount, Map<Integer, Integer> senderVectorClock) {
+		super(messageType, sender, receiver, amount, mapDeepCopy(senderVectorClock), routeList, messageId);
+		this.originalDestination = originalDestination;
 	}
 
 	public ServentInfo getOriginalDestination() {
@@ -44,8 +37,8 @@ public class AVTellMessage extends CausalBroadcastMessage {
 		List<ServentInfo> newRouteList = new ArrayList<>(getRoute());
 		newRouteList.add(newRouteItem);
 
-		return new AVTellMessage(getOriginalDestination(), getOriginalSenderInfo(),
-				getReceiverInfo(), newRouteList, getMessageId(), getABSnapshotResult(), getSenderVectorClock());
+		return new AVTellMessage(getMessageType(), getOriginalDestination(), getOriginalSenderInfo(),
+				getReceiverInfo(), newRouteList, getMessageId(), getMessageText(), getSenderVectorClock());
 	}
 
 	@Override
@@ -53,8 +46,8 @@ public class AVTellMessage extends CausalBroadcastMessage {
 		if (AppConfig.myServentInfo.getNeighbors().contains(newReceiverId)) {
 			ServentInfo newReceiverInfo = AppConfig.getInfoById(newReceiverId);
 
-			return new AVTellMessage(getOriginalDestination(), getOriginalSenderInfo(), newReceiverInfo,
-					getRoute(), getMessageId(), getABSnapshotResult(), getSenderVectorClock());
+			return new AVTellMessage(getMessageType(), getOriginalDestination(), getOriginalSenderInfo(), newReceiverInfo,
+					getRoute(), getMessageId(), getMessageText(), getSenderVectorClock());
 		} else {
 			AppConfig.timestampedErrorPrint("Trying to make a message for " + newReceiverId + " who is not a neighbor.");
 

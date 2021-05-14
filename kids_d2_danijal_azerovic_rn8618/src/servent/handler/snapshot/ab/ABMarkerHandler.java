@@ -11,8 +11,6 @@ import servent.message.Message;
 import servent.message.MessageType;
 import servent.message.snapshot.ab.ABMarkerMessage;
 import servent.message.snapshot.ab.ABTellMessage;
-import servent.message.snapshot.naive.NaiveAskAmountMessage;
-import servent.message.snapshot.naive.NaiveTellAmountMessage;
 import servent.message.util.MessageUtil;
 
 import java.util.Collections;
@@ -53,8 +51,11 @@ public class ABMarkerHandler implements MessageHandler {
 					}
 
 					ABSnapshotResult abSnapshotResult = new ABSnapshotResult(clientMessage.getOriginalSenderInfo().getId(), currentAmount, ((ABBitcakeManager) bitcakeManager).getSent(), ((ABBitcakeManager)bitcakeManager).getReceived());
+//					Message myMessage = new ABTellMessage(clientMessage.getOriginalSenderInfo(), AppConfig.myServentInfo, AppConfig.myServentInfo,
+//							abSnapshotResult, ((ABMarkerMessage)clientMessage).getSenderVectorClock());
+
 					Message myMessage = new ABTellMessage(clientMessage.getOriginalSenderInfo(), AppConfig.myServentInfo, AppConfig.myServentInfo,
-							abSnapshotResult, ((ABMarkerMessage)clientMessage).getSenderVectorClock());
+							abSnapshotResult, CausalBroadcastShared.getVectorClock());
 
 					for (Integer neighbor : AppConfig.myServentInfo.getNeighbors()) {
 						//My message

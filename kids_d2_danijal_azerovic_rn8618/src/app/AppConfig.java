@@ -7,10 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class contains all the global application configuration stuff.
@@ -43,7 +41,13 @@ public class AppConfig {
 	public static SnapshotType SNAPSHOT_TYPE;
 
 	public static Object sendLock = new Object();
-	public static Object bitcakeLock = new Object();
+	public static final Object bitcakeLock = new Object();
+	public static Map<Integer, Integer> tokenClock;
+
+	/**
+	 * If this is true, this node sent done message and every new transaction should go to channel
+	 */
+	public static AtomicBoolean done = new AtomicBoolean(false);
 
 	/**
 	 * Print a message to stdout with a timestamp

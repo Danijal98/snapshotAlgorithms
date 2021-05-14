@@ -18,6 +18,8 @@ import servent.handler.NullHandler;
 import servent.handler.TransactionHandler;
 import servent.handler.snapshot.ab.ABMarkerHandler;
 import servent.handler.snapshot.ab.ABTellHandler;
+import servent.handler.snapshot.av.AVMarkerHandler;
+import servent.handler.snapshot.av.AVTellHandler;
 import servent.handler.snapshot.naive.NaiveAskAmountHandler;
 import servent.handler.snapshot.naive.NaiveTellAmountHandler;
 import servent.handler.snapshot.NaiveTokenAmountHandler;
@@ -63,18 +65,6 @@ public class SimpleServentListener implements Runnable, Cancellable {
 				
 				//GOT A MESSAGE! <3
 				Message clientMessage = MessageUtil.readMessage(clientSocket);
-
-				// ACHARYA_BADRINATH
-				if (AppConfig.SNAPSHOT_TYPE == SnapshotType.ACHARYA_BADRINATH) {
-					if (clientMessage.getMessageType() != MessageType.AB_MARKER) {
-						ABBitcakeManager abBitcakeManager =
-								(ABBitcakeManager)snapshotCollector.getBitcakeManager();
-//						abBitcakeManager.addChannelMessage(clientMessage);
-					}
-				}
-
-				// TODO ALAGAR_VENKATESAN
-
 				MessageHandler messageHandler = new NullHandler(clientMessage);
 				
 				/*
@@ -104,7 +94,13 @@ public class SimpleServentListener implements Runnable, Cancellable {
 					case AB_TELL:
 						messageHandler = new ABTellHandler(clientMessage, snapshotCollector);
 						break;
-					//todo
+					case AV_MARKER:
+					case AV_TERMINATE:
+						messageHandler = new AVMarkerHandler(clientMessage, snapshotCollector.getBitcakeManager());
+						break;
+					case AV_DONE:
+						messageHandler = new AVTellHandler(clientMessage, snapshotCollector);
+						break;
 				}
 				
 				threadPool.submit(messageHandler);

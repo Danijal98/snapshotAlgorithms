@@ -1,15 +1,5 @@
-21:37:10 - Starting servent [3|localhost|1400]
-21:37:10 - Pausing for 40000 ms
-21:37:22 - Already had this. No rebroadcast.
-21:37:23 - Already had this. No rebroadcast.
-21:37:23 - Already had this. No rebroadcast.
-21:37:23 - Already had this. No rebroadcast.
-21:37:24 - Already had this. No rebroadcast.
-21:37:24 - Already had this. No rebroadcast.
-21:37:40 - Already had this. No rebroadcast.
-21:37:41 - Already had this. No rebroadcast.
-21:37:41 - Already had this. No rebroadcast.
-21:37:41 - Already had this. No rebroadcast.
-21:37:42 - Already had this. No rebroadcast.
-21:37:43 - Already had this. No rebroadcast.
-21:37:50 - Stopping...
+17:07:07 - Starting servent [3|localhost|1400]
+17:07:07 - Pausing for 40000 ms
+17:07:24 - Channel transactions: {1=0, 2=245, 4=0}
+17:07:42 - Channel transactions: {1=0, 2=0, 4=0}
+17:07:47 - Stopping...

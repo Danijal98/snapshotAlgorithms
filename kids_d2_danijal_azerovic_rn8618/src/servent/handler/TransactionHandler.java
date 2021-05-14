@@ -4,7 +4,9 @@ import app.AppConfig;
 import app.CausalBroadcastShared;
 import app.ServentInfo;
 import app.snapshot_bitcake.ABBitcakeManager;
+import app.snapshot_bitcake.AVBitcakeManager;
 import app.snapshot_bitcake.BitcakeManager;
+import servent.message.CausalBroadcastMessage;
 import servent.message.Message;
 import servent.message.MessageType;
 import servent.message.TransactionMessage;
@@ -51,7 +53,7 @@ public class TransactionHandler implements MessageHandler {
 			if (doRebroadcast) {
 				if (senderInfo.getId() == AppConfig.myServentInfo.getId()) {
 					//We are the sender :o someone bounced this back to us. /ignore
-					AppConfig.timestampedStandardPrint("Got own message back. No rebroadcast.");
+//					AppConfig.timestampedStandardPrint("Got own message back. No rebroadcast.");
 				} else {
 					//Try to put in the set. Thread safe add ftw.
 					boolean didPut = receivedBroadcasts.add(clientMessage);
@@ -66,6 +68,15 @@ public class TransactionHandler implements MessageHandler {
 								ABBitcakeManager abBitcakeManager = (ABBitcakeManager) bitcakeManager;
 								synchronized (AppConfig.bitcakeLock) {
 									abBitcakeManager.recordReceivedTransaction(clientMessage.getOriginalSenderInfo().getId(), amountNumber);
+								}
+							}
+							if (bitcakeManager instanceof AVBitcakeManager) {
+								AVBitcakeManager avBitcakeManager = (AVBitcakeManager) bitcakeManager;
+								//todo check message causality
+								synchronized (AppConfig.bitcakeLock) {
+									if(AppConfig.done.get() && CausalBroadcastShared.checkIfMessageOld((CausalBroadcastMessage) clientMessage)) {
+										avBitcakeManager.recordChannelTransaction(clientMessage.getOriginalSenderInfo().getId(), amountNumber);
+									}
 								}
 							}
 						}
